@@ -1,10 +1,78 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import style from "./home.module.css";
+// @ts-ignore
+import FOG from "vanta/dist/vanta.fog.min";
+import * as THREE from "three";
 
 export default function Home() {
+  const vantaRef = useRef(null);
+  const vantaEffectRef = useRef(null);
+
+  useEffect(() => {
+    // initialize the Vanta effect once on mount and store it in a ref
+    const handleResize = () => {
+      if (vantaEffectRef.current && typeof vantaEffectRef.current.resize === "function") {
+        vantaEffectRef.current.resize();
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    if (!vantaEffectRef.current && vantaRef.current) {
+      // some Vanta builds expect THREE on window
+      window.THREE = THREE;
+
+      vantaEffectRef.current = FOG({
+        el: vantaRef.current,
+        THREE: THREE,
+      touchControls: true,
+  gyroControls: false,
+  minHeight: 200.00,
+  minWidth: 200.00,
+  highlightColor: 0x4c7395,
+  midtoneColor: 0x12256f,
+  lowlightColor: 0x564f84,
+  baseColor: 0x514663,
+  blurFactor: 0.66,
+  speed: 5.10
+
+      });
+      // post-init perf and styling tweaks
+      try {
+        const inst = vantaEffectRef.current;
+        if (inst && inst.renderer && typeof inst.renderer.setPixelRatio === 'function') {
+          const maxDpr = 1.5;
+          inst.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, maxDpr));
+        }
+        const canvas = inst && inst.renderer && inst.renderer.domElement;
+        if (canvas) {
+          canvas.style.pointerEvents = 'none';
+          canvas.style.zIndex = '0';
+        }
+        if (vantaRef.current && window.getComputedStyle(vantaRef.current).position === 'static') {
+          vantaRef.current.style.position = 'relative';
+        }
+      } catch (e) {
+        console.warn('Vanta fog post-init tweak failed', e);
+      }
+    
+    }
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      try {
+        console.debug("Vanta cleanup, current:", vantaEffectRef.current);
+      } catch (e) {}
+      if (vantaEffectRef.current && typeof vantaEffectRef.current.destroy === "function") {
+        vantaEffectRef.current.destroy();
+        vantaEffectRef.current = null;
+      }
+    };
+  }, []);
+
   return (
-    <div className={style.pageWrapper}>
-      <main className={style.container}>
+    <div  className={style.pageWrapper}  ref={vantaRef}>
+      <main className={style.container}  >
         <section className={style.hero}>
           <div className={`${style.heroContent} ${style.glowEffect}`}>
             <h1 className={style.title}>VocabMaster</h1>
