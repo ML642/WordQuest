@@ -1,0 +1,40 @@
+.tiltCard {
+  transform-style: preserve-3d;
+  transform: perspective(1000px);
+  will-change: transform;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  background: inherit;
+}
+
+.tiltCard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    45deg,
+    rgba(59, 130, 246, 0.1) 0%,
+    rgba(59, 130, 246, 0.2) 100%
+  );
+  border-radius: inherit;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+
+.tiltCard:hover::before {
+  opacity: 1;
+}
+
+.tiltCard > * {
+  transform: translateZ(20px);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  position: relative;
+  z-index: 1;
+}
