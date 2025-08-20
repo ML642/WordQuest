@@ -33,6 +33,21 @@
   max-width: 600px;
 }
 
+/* 3D flip/rotation */
+.heroContent {
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  cursor: pointer;
+}
+
+.rotated {
+  transform: rotateY(180deg);
+}
+
+.heroContent, .heroContent * {
+  backface-visibility: hidden;
+}
+
 .title {
   font-size: 3.5rem;
   font-weight: 800;
@@ -142,11 +157,13 @@
 
 /* How It Works Section */
 .howItWorks {
+  position : relative;
   padding: 5rem 0;
   margin: 2rem 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: none;
   border-top: 1px solid rgba(59, 130, 246, 0.3);
   border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+  z-index : -1 ;
 }
 
 .steps {
@@ -155,6 +172,8 @@
   gap: 2rem;
   max-width: 1000px;
   margin: 0 auto;
+    z-index : -1 ;
+
 }
 
 .step {
@@ -165,6 +184,7 @@
   border-radius: 1rem;
   border: 1px solid rgba(59, 130, 246, 0.3);
   transition: all 0.3s ease;
+  
 }
 
 .step:hover {
@@ -244,6 +264,212 @@
   transform: translateY(-2px);
 }
 
+/* Benefits Section */
+.benefits {
+  padding: 5rem 0;
+  background: rgba(17, 24, 39, 0.4);
+  border-radius: 1rem;
+  margin: 3rem 0;
+}
+
+.benefitsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 0 2rem;
+}
+
+.benefitCard {
+  background: rgba(17, 24, 39, 0.6);
+  border-radius: 1rem;
+  padding: 2rem;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  transition: all 0.3s ease;
+}
+
+.benefitCard:hover {
+  transform: translateY(-5px);
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+}
+
+.benefitIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.4));
+}
+
+.benefitContent h3 {
+  color: #ffffff;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.benefitList {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0 0;
+}
+
+.benefitList li {
+  color: #e2e8f0;
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.benefitList li::before {
+  content: "•";
+  color: #60a5fa;
+  position: absolute;
+  left: 0;
+}
+
+/* Testimonials Section */
+.testimonials {
+  padding: 5rem 0;
+}
+
+.testimonialGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  padding: 0 2rem;
+}
+
+.testimonialCard {
+  background: rgba(17, 24, 39, 0.6);
+  border-radius: 1rem;
+  padding: 2rem;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  transition: all 0.3s ease;
+}
+
+.testimonialCard:hover {
+  transform: translateY(-5px);
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+}
+
+.testimonialQuote {
+  font-size: 1.1rem;
+  color: #e2e8f0;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+.testimonialProfile {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.testimonialAvatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #60a5fa;
+}
+
+.testimonialInfo h4 {
+  color: #ffffff;
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.testimonialInfo p {
+  color: #94a3b8;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.testimonialScore {
+  margin-left: auto;
+  text-align: right;
+}
+
+.scoreLabel {
+  display: block;
+  color: #94a3b8;
+  font-size: 0.8rem;
+}
+
+.scoreValue {
+  color: #60a5fa;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* Gamification Section */
+.gamification {
+  padding: 5rem 0;
+  background: rgba(17, 24, 39, 0.4);
+  border-radius: 1rem;
+  margin: 3rem 0;
+}
+
+.achievementsShowcase {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  padding: 0 2rem;
+}
+
+.achievement {
+  background: rgba(17, 24, 39, 0.6);
+  border-radius: 1rem;
+  padding: 2rem;
+  text-align: center;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  transition: all 0.3s ease;
+}
+
+.achievement:hover {
+  transform: translateY(-5px);
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+}
+
+.achievementIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.4));
+}
+
+.achievement h3 {
+  color: #ffffff;
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+}
+
+.achievement p {
+  color: #94a3b8;
+  margin: 0 0 1.5rem;
+  font-size: 0.9rem;
+}
+
+.progressBar {
+  background: rgba(255, 255, 255, 0.1);
+  height: 8px;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background: linear-gradient(90deg, #60a5fa, #3b82f6);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progressText {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
 /* CTA Section */
 .cta {
   text-align: center;
@@ -265,6 +491,23 @@
   font-size: 1.1rem;
   line-height: 1.5;
 }
+
+.ctaNote {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+.canvas {
+     position : 'fixed' !important;
+     top : '0' !important;
+    left : '0';
+    width : '100%';
+    height : '11500px' ;
+    pointer-events :'none';
+    z-index: 0;
+}
+
 
 /* Animations */
 @keyframes rotate {

@@ -9,7 +9,6 @@ export default function Home() {
   const vantaEffectRef = useRef(null);
 
   useEffect(() => {
-    // initialize the Vanta effect once on mount and store it in a ref
     const handleResize = () => {
       if (vantaEffectRef.current && typeof vantaEffectRef.current.resize === "function") {
         vantaEffectRef.current.resize();
@@ -19,43 +18,46 @@ export default function Home() {
     window.addEventListener("resize", handleResize);
 
     if (!vantaEffectRef.current && vantaRef.current) {
-      // some Vanta builds expect THREE on window
-      window.THREE = THREE;
 
-      vantaEffectRef.current = FOG({
+        window.THREE = THREE;
+    vantaEffectRef.current = FOG({
         el: vantaRef.current,
         THREE: THREE,
-      touchControls: true,
-  gyroControls: false,
-  minHeight: 200.00,
-  minWidth: 200.00,
-  highlightColor: 0x4c7395,
-  midtoneColor: 0x12256f,
-  lowlightColor: 0x564f84,
-  baseColor: 0x514663,
-  blurFactor: 0.66,
-  speed: 5.10
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        highlightColor: 0x4c7395,
+        midtoneColor: 0x12256f,
+        lowlightColor: 0x564f84,
+        baseColor: 0x514663,
+        blurFactor: 0.66,
+        speed: 5.10
 
       });
-      // post-init perf and styling tweaks
+      // ensure the Vanta canvas covers the full viewport and sits behind UI
       try {
         const inst = vantaEffectRef.current;
-        if (inst && inst.renderer && typeof inst.renderer.setPixelRatio === 'function') {
-          const maxDpr = 1.5;
-          inst.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, maxDpr));
-        }
         const canvas = inst && inst.renderer && inst.renderer.domElement;
         if (canvas) {
+          canvas.style.position = 'fixed';
+          canvas.style.top = '0';
+          canvas.style.left = '0';
+          canvas.style.width = '100%';
+          canvas.style.height = '100%';
           canvas.style.pointerEvents = 'none';
           canvas.style.zIndex = '0';
         }
-        if (vantaRef.current && window.getComputedStyle(vantaRef.current).position === 'static') {
-          vantaRef.current.style.position = 'relative';
+        if (vantaRef.current) {
+          vantaRef.current.style.position = 'fixed';
+          vantaRef.current.style.top = '0';
+          vantaRef.current.style.left = '0';
+          vantaRef.current.style.width = '100%';
+          vantaRef.current.style.height = '100%';
         }
       } catch (e) {
-        console.warn('Vanta fog post-init tweak failed', e);
+        console.warn('Could not force Vanta canvas fullscreen', e);
       }
-    
     }
 
     return () => {
@@ -152,10 +154,88 @@ export default function Home() {
           </div>
         </section>
 
+        <section className={style.benefits}>
+          <h2 className={style.sectionTitle}>Learning Benefits</h2>
+          <div className={style.benefitsGrid}>
+            <div className={style.benefitCard}>
+              <div className={style.benefitIcon}>🎓</div>
+              <div className={style.benefitContent}>
+                <h3>Academic Success</h3>
+                <p>Improve your reading comprehension and writing skills for better academic performance</p>
+                <ul className={style.benefitList}>
+                  <li>Enhanced reading speed</li>
+                  <li>Better comprehension</li>
+                  <li>Improved writing clarity</li>
+                </ul>
+              </div>
+            </div>
+            <div className={style.benefitCard}>
+              <div className={style.benefitIcon}>💼</div>
+              <div className={style.benefitContent}>
+                <h3>Professional Growth</h3>
+                <p>Stand out in your career with sophisticated communication skills</p>
+                <ul className={style.benefitList}>
+                  <li>Better presentations</li>
+                  <li>Clear emails</li>
+                  <li>Professional reports</li>
+                </ul>
+              </div>
+            </div>
+            <div className={style.benefitCard}>
+              <div className={style.benefitIcon}>🌍</div>
+              <div className={style.benefitContent}>
+                <h3>Global Communication</h3>
+                <p>Connect with people worldwide more effectively</p>
+                <ul className={style.benefitList}>
+                  <li>Cultural understanding</li>
+                  <li>Confident speaking</li>
+                  <li>International networking</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        
+
+        <section className={style.gamification}>
+          <h2 className={style.sectionTitle}>Make Learning Fun</h2>
+          <div className={style.achievementsShowcase}>
+            <div className={style.achievement}>
+              <div className={style.achievementIcon}>🏆</div>
+              <h3>Word Master</h3>
+              <p>Learn 500 words</p>
+              <div className={style.progressBar}>
+                <div className={style.progress} style={{width: '75%'}}></div>
+              </div>
+              <span className={style.progressText}>375/500</span>
+            </div>
+            <div className={style.achievement}>
+              <div className={style.achievementIcon}>⚡</div>
+              <h3>Speed Demon</h3>
+              <p>Complete 10 quick reviews</p>
+              <div className={style.progressBar}>
+                <div className={style.progress} style={{width: '90%'}}></div>
+              </div>
+              <span className={style.progressText}>9/10</span>
+            </div>
+            <div className={style.achievement}>
+              <div className={style.achievementIcon}>🔥</div>
+              <h3>Daily Streak</h3>
+              <p>Practice 7 days in a row</p>
+              <div className={style.progressBar}>
+                <div className={style.progress} style={{width: '85%'}}></div>
+              </div>
+              <span className={style.progressText}>6/7</span>
+            </div>
+          </div>
+        </section>
+
         <section className={style.cta}>
           <h2>Ready to Expand Your Vocabulary?</h2>
           <p>Join thousands of learners improving their English every day</p>
           <button className={style.primaryBtn}>Start Learning Now</button>
+          <p className={style.ctaNote}>No credit card required • Free plan available</p>
         </section>
       </main>
     </div>
