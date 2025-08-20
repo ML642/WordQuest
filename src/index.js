@@ -5,11 +5,11 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter ,RouterProvider } from 'react-router';
 import Home from "./pages/Home/home.jsx"
-
+import WordArch from './pages/Word_Arch/wordArch.jsx';
 
 const route = createBrowserRouter([
-   {path : "/" , element : <Home/>}
-
+   {path : "/" , element : <Home/>} , 
+   {path : "/WordArch" , element : <WordArch/>}
 
 ])
 
