@@ -20,12 +20,17 @@ const AppLayout = (props) => {
    )
     
 }
-
+const Login = () => {
+    return (
+        <div>Login Page</div>
+    )
+}
 
 
 const route = createBrowserRouter([
    {path : "/" , element :<AppLayout component={<Home/>} />} , 
-   {path : "/WordArch" , element : <AppLayout component={<Home/>}/>}
+   {path : "/WordArch" , element : <AppLayout component={<WordArch/>}/>},
+   {path : "/Login" , element : <AppLayout component={<Login/>}/>}
 
 ])
 

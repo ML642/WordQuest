@@ -12,6 +12,7 @@
 
    display :flex ;
    justify-content: space-around;
+   align-items :center
 }
 
 .logo {
@@ -46,17 +47,46 @@
     }
 }
 
-navigator {
+.navigator {
+    display :flex ; 
+    width : 40%;
+    justify-content : space-around  ;
+    align-items : center ;
+    margin-right: 5rem ;
+}
+
+.Link{
+    font-size: large;
+    text-decoration:none ;
+    color : white  ; 
+    transition:all 0.3s ease-in-out ;
+}
+
+.Link:hover {
+    color :#463fd1
+}
+.loginButton {
+
+    width : 10rem ;  
+    height: 2rem  ;
     display : flex ;
     justify-content : center ;
     align-items : center ;
-    gap : 1rem ;
-    margin : 1rem ;
+    font-weight : 1000 ;
+
+    border-radius : 1rem ;
+    border : 1px solid white ;
+    background : rgba(255, 255, 255, 0.05) ; 
+    backdrop-filter : blur(10px) ;
+    -webkit-backdrop-filter: blur(10px)  ;
+    color : white ;
+    cursor : pointer ;
+    transition: all 0.3s ease-in-out ;
 }
 
-navigator Link {
-    width : auto ;
-    height : auto ;
-
-
-} 
+.loginButton:hover {
+    transform : scale(1.05) ; 
+    
+    box-shadow :#463fd1 0px 0px 8px 2px ;
+    background : rgba(255, 255, 255, 0.15) ;
+}
