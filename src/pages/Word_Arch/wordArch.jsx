@@ -237,7 +237,6 @@ const WordArch = () => {
                 }
                 setLevelWords(uniqueWords);
             } else {
-                // For specific levels, get all words for that level
                 const words = data[level] || [];
                 const uniqueWords = [...new Set(words)];
                 // Shuffle array
@@ -269,11 +268,11 @@ const WordArch = () => {
         <div className={styles.wordArchContainer}>  
             <section className={styles.wordArchSection}> 
                 <h1 className={styles.title}>Choose Your CEFR Level</h1>
-                <CEFRTable 
+                {!selectedLevel && <CEFRTable 
                     onSelectLevel={handleLevelSelect}
                     cerfLevelData={cerfLevelData}
                     selectedLevel={selectedLevel}
-                />
+                />}
                 {selectedLevel && isLoading && (
                     <div className={styles.loading}>Loading words...</div>
                 )}

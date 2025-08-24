@@ -6,12 +6,29 @@ import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter ,RouterProvider } from 'react-router';
 import Home from "./pages/Home/home.jsx"
 import WordArch from './pages/Word_Arch/wordArch.jsx';
+import Header from './layout/header/header.jsx';
+import Footer from './layout/footer/footer.jsx';
+
+
+const AppLayout = (props) => {
+   return (
+      <div>
+         <Header/>
+          {props.component}
+         <Footer/>
+      </div>
+   )
+    
+}
+
+
 
 const route = createBrowserRouter([
-   {path : "/" , element : <Home/>} , 
-   {path : "/WordArch" , element : <WordArch/>}
+   {path : "/" , element :<AppLayout component={<Home/>} />} , 
+   {path : "/WordArch" , element : <AppLayout component={<Home/>}/>}
 
 ])
+
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
