@@ -8,7 +8,7 @@ import Home from "./pages/Home/home.jsx"
 import WordArch from './pages/Word_Arch/wordArch.jsx';
 import Header from './layout/header/header.jsx';
 import Footer from './layout/footer/footer.jsx';
-
+import Login from './pages/Login/Login.jsx';
 
 const AppLayout = (props) => {
    return (
@@ -20,11 +20,7 @@ const AppLayout = (props) => {
    )
     
 }
-const Login = () => {
-    return (
-        <div>Login Page</div>
-    )
-}
+
 
 
 const route = createBrowserRouter([
