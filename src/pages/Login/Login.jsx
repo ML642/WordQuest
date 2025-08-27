@@ -35,12 +35,12 @@ const Login = () => {
       <div className={styles.card}>
         <div className={styles.header}>
           <h1 className={styles.title}>Welcome Back</h1>
-          <p className={styles.subtitle}>Enter your credentials to continue</p>
         </div>
 
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.inputGroup}>
             <div className={styles.inputWrapper}>
+              <label htmlFor="email" className={styles.label}>Email</label>
               <input
                 type="email"
                 id="email"
@@ -48,16 +48,15 @@ const Login = () => {
                 value={formData.email}
                 onChange={handleChange}
                 className={styles.input}
-                placeholder=" "
                 required
               />
-              <label htmlFor="email" className={styles.label}>Email</label>
               <div className={styles.inputHighlight}></div>
             </div>
           </div>
 
           <div className={styles.inputGroup}>
             <div className={styles.inputWrapper}>
+              <label htmlFor="password" className={styles.label}>Password</label>
               <input
                 type="password"
                 id="password"
@@ -65,10 +64,8 @@ const Login = () => {
                 value={formData.password}
                 onChange={handleChange}
                 className={styles.input}
-                placeholder=" "
                 required
               />
-              <label htmlFor="password" className={styles.label}>Password</label>
               <div className={styles.inputHighlight}></div>
             </div>
           </div>
