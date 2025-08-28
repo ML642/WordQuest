@@ -41,7 +41,7 @@ const Header = () => {
             initial={{ x : 50 , opacity : 0 }}
                 animate={{ x : 0 , opacity : 1 }}
                 transition={{ delay : 0.6 , duration : 0.4 }}> 
-                <div className = {styles.loginButton}>  LOGIN   </div> 
+                <Link to="/Login" ><div className = {styles.loginButton}>  LOGIN   </div>  </Link>
             </motion.div>
            
             

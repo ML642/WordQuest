@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
-require('dotenv').config();
-
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 async function connectDB() {
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
+    //console.log(require('dotenv').config({ path: __dirname + '/.env' }));
+
+    console.log(process.env.MONGODB_URI)
+    await mongoose.connect(process.env.MONGODB_URI , {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
@@ -13,5 +16,4 @@ async function connectDB() {
     process.exit(1);
   }
 }
-
 module.exports = connectDB;

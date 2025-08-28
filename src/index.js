@@ -9,6 +9,9 @@ import WordArch from './pages/Word_Arch/wordArch.jsx';
 import Header from './layout/header/header.jsx';
 import Footer from './layout/footer/footer.jsx';
 import Login from './pages/Login/Login.jsx';
+import Registration from "./pages/registration/registration.jsx"
+
+
 
 const AppLayout = (props) => {
    return (
@@ -26,8 +29,8 @@ const AppLayout = (props) => {
 const route = createBrowserRouter([
    {path : "/" , element :<AppLayout component={<Home/>} />} , 
    {path : "/WordArch" , element : <AppLayout component={<WordArch/>}/>},
-   {path : "/Login" , element : <AppLayout component={<Login/>}/>}
-
+   {path : "/Login" , element : <AppLayout component={<Login/>}/>}, 
+   {path: "/Registration" , element: <AppLayout component={<Registration/>}/>}
 ])
 
 

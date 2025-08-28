@@ -1,14 +1,17 @@
+require('dotenv').config();
 const express = require ("express") ;
 const jwt = require ("jsonwebtoken") ;
 const cors = require ("cors") ;
 const connectDB = require ("./database") ;
 const Word = require ("./models/words") ;
 const allowedOrigins =  ['http://localhost:3000', 'http://localhost:5000'];
-
+const Auth = require ("./auth") ;
 const PORT  = 5000 ; 
 
 const app =  express() ; 
 
+
+const listEndpoints = require('express-list-endpoints');
 app.use ((req,res,next )=>{
     console.log("incoming request : " + req.method + " " + req.url )
     next(); 
@@ -43,7 +46,7 @@ app.get('/api/words', async (req, res) => {
   const words = await Word.find();
   res.json(words);
 });
-        
+app.use (Auth) ;
 // POST add a new word
 app.post('/api/words', async (req, res) => {
   const newWord = new Word(req.body);
@@ -64,5 +67,6 @@ app.post("/api/login" , ( req , res ) =>
 
 
 app.listen(PORT  , ()=>{
+    console.log("available enpoints :" ,  listEndpoints(app) )
     console.log("server is running on port " + PORT )
 })

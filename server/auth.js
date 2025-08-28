@@ -12,11 +12,13 @@ router.post("/api/register", async (req, res) => {
         const { username, password, email } = req.body;
 
         if (!username || !password || !email) {
+            console.log("All fields are required");
             return res.status(400).json({ message: "All fields are required" });
         }
 
         const existingUser = await User.findOne({ email });
         if (existingUser) {
+            console.log("Email already registered");
             return res.status(400).json({ message: "Email already registered" });
         }
 
@@ -27,7 +29,7 @@ router.post("/api/register", async (req, res) => {
             email,
             password: hashedPassword
         });
-
+        console.log(newUser);
         await newUser.save();
 
         res.status(201).json({ message: "User registered successfully" });
@@ -94,10 +96,6 @@ router.get("/api/userInfo" , async  ( req, res )=>
 
 }
 )
-
-
-
-
 
 
 

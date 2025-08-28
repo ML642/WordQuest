@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import styles from './Login.module.css';
+import styles from './registration.module.css';
 import { Link } from "react-router"
-const Login = () => {
+import axios from "axios"
+const Registration = () => {
   const [formData, setFormData] = useState({
+    userName: "" , 
     email: '',
     password: ''
   });
@@ -19,8 +21,11 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 800));
+    const response =  await axios.post ("http://localhost:5000/api/register" , JSON.stringify({
+        headers : {"Content-Type" : "application/json" } ,
+        body : JSON.stringify (formData)
+
+    })) ;
     console.log('Login:', formData);
     setIsLoading(false);
   };
@@ -34,12 +39,24 @@ const Login = () => {
       
       <div className={styles.card}>
         <div className={styles.header}>
-          <h1 className={styles.title}>Welcome Back</h1>
+          <h1 className={styles.title}>Welcome </h1>
         </div>
 
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.inputGroup}>
             <div className={styles.inputWrapper}>
+              <label htmlFor="userName" className={styles.label}>Username</label>
+              <input
+                style ={{marginBottom : "10px"}}
+                id="userName"
+                name="userName"
+                value={formData.userName}
+                onChange={handleChange}
+                className={styles.input}
+                required
+              />
+              <div className={styles.inputHighlight }></div>
+
               <label htmlFor="email" className={styles.label}>Email</label>
               <input
                 type="email"
@@ -95,7 +112,7 @@ const Login = () => {
         <div className={styles.footer}>
           <p>
             Don't have an account? 
-            <Link to="/Registration" className={styles.link}> Create one now</Link>
+            <Link to="Registration" className={styles.link}> Create one now</Link>
           </p>
         </div>
 
@@ -122,4 +139,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Registration;
