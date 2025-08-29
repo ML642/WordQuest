@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState , useEffect , useRef } from 'react';
 import styles from './Login.module.css';
 import { Link } from "react-router"
 import axios from "axios"
@@ -9,7 +9,10 @@ const Login = () => {
     password: ''
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [error , setError] =  useState(false) ; 
+  const errorRef =  useRef(null) ;
 
+ 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -21,8 +24,8 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
-    const Response  =  await axios.post("hhtp/localhost:5000/api/login", 
+    try {
+    const Response  =  await axios.post("http://localhost:5000/api/login", 
         {
             email : formData.email , 
             password : formData.password
@@ -33,7 +36,20 @@ const Login = () => {
             }
         }
     ) 
-    alert (Response.data.message ) ;
+    if (Response.status === 201 ) {
+        localStorage.setItem ("token" , Response.data.token ) ;
+        localStorage.setItem ("user" , JSON.stringify (Response.data.user)) ;
+    }
+ }
+    catch (error) {
+        if (error.status === 400 ) {
+            setError(false);          // reset first
+            setTimeout(() => setError(true), 0);
+            console.log(error) ;
+           // alert ( error.response.data.message ) ;
+        }
+        console.log('Login error:', error);
+    }
      await new Promise(resolve => setTimeout(resolve, 800));
     console.log('Login:', formData);
     setIsLoading(false);
@@ -50,7 +66,6 @@ const Login = () => {
         <div className={styles.header}>
           <h1 className={styles.title}>Welcome Back</h1>
         </div>
-
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.inputGroup}>
             <div className={styles.inputWrapper}>
@@ -83,6 +98,7 @@ const Login = () => {
               <div className={styles.inputHighlight}></div>
             </div>
           </div>
+        {error && <div style={{fontSize:"1.1rem" , color:"red",marginBottom:"20px" , position:"relative" } }className = {styles.shake} ref={errorRef}>   Invalid password or email </div>}
 
           <div className={styles.options}>
             <label className={styles.rememberMe}>
@@ -98,6 +114,9 @@ const Login = () => {
             type="submit" 
             className={`${styles.button} ${isLoading ? styles.loading : ''}`}
             disabled={isLoading}
+            onClick={()=>{ if (errorRef.current){errorRef.current.classList.remove(styles.shake);
+      void errorRef.current.offsetWidth; // force reflow
+      errorRef.current.classList.add(styles.shake);}}}
           >
             <span className={styles.buttonText}>
               {isLoading ? 'Signing in...' : 'Sign in'}
