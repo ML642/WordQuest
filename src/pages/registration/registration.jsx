@@ -4,7 +4,7 @@ import { Link } from "react-router"
 import axios from "axios"
 const Registration = () => {
   const [formData, setFormData] = useState({
-    userName: "" , 
+    username: "" , 
     email: '',
     password: ''
   });
@@ -21,11 +21,24 @@ const Registration = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    const response =  await axios.post ("http://localhost:5000/api/register" , JSON.stringify({
-        headers : {"Content-Type" : "application/json" } ,
-        body : JSON.stringify (formData)
-
-    })) ;
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/register",
+        {
+          username: formData.username,
+          email: formData.email,
+          password: formData.password
+        },
+        {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+      );
+      console.log('Registration successful:', response.data);
+    } catch (error) {
+      console.error('Registration error:', error.response?.data || error.message);
+    }
     console.log('Login:', formData);
     setIsLoading(false);
   };
@@ -48,9 +61,9 @@ const Registration = () => {
               <label htmlFor="userName" className={styles.label}>Username</label>
               <input
                 style ={{marginBottom : "10px"}}
-                id="userName"
-                name="userName"
-                value={formData.userName}
+                id="username"
+                name="username"
+                value={formData.username}
                 onChange={handleChange}
                 className={styles.input}
                 required

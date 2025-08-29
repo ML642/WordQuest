@@ -4,6 +4,7 @@ const User = require("./models/User");
 const connectDB = require("./database");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
 require('dotenv').config();
 connectDB();
 
@@ -12,12 +13,14 @@ router.post("/api/register", async (req, res) => {
         const { username, password, email } = req.body;
 
         if (!username || !password || !email) {
+            console.log(username, password, email);
             console.log("All fields are required");
             return res.status(400).json({ message: "All fields are required" });
         }
 
         const existingUser = await User.findOne({ email });
         if (existingUser) {
+            console.log(username, password, email);
             console.log("Email already registered");
             return res.status(400).json({ message: "Email already registered" });
         }
@@ -35,7 +38,7 @@ router.post("/api/register", async (req, res) => {
         res.status(201).json({ message: "User registered successfully" });
     } catch (error) {
         console.error("Registration error:", error);
-        res.status(500).json({ message: "Error registering user" });
+        res.status(500).json({ message: `Error registering user  ${error}` });
     }
 });
 
@@ -50,7 +53,11 @@ router.post ("/api/login" ,  async ( req , res ) =>
        if(!user) {
         return res.status(400).json ({message : "Ivalid email or password"}) ;
        }
-       const isMatch = await bcrypt.compare(password , user.password ) ;       
+       const hashedPassword = await bcrypt.hash(password, 10);
+       console.log(hashedPassword)
+
+       const isMatch = await bcrypt.compare(password , user.password ) ;  
+       console.log( password , user.password )
        if (!isMatch ){
         return res.status(400).json ({message : "Invalid email or pasword"}) ;
        }

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import styles from './Login.module.css';
 import { Link } from "react-router"
+import axios from "axios"
+
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -19,8 +21,20 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 800));
+
+    const Response  =  await axios.post("hhtp/localhost:5000/api/login", 
+        {
+            email : formData.email , 
+            password : formData.password
+        }
+        , {
+            headers : {
+                "Content-Type" : "application/json"
+            }
+        }
+    ) 
+    alert (Response.data.message ) ;
+     await new Promise(resolve => setTimeout(resolve, 800));
     console.log('Login:', formData);
     setIsLoading(false);
   };
