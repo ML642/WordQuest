@@ -2,6 +2,9 @@ import { useState , useEffect , useRef } from 'react';
 import styles from './Login.module.css';
 import { Link } from "react-router"
 import axios from "axios"
+import GoogleOauth from './Oauth';
+
+ 
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -131,7 +134,7 @@ const Login = () => {
             <Link to="/Registration" className={styles.link}> Create one now</Link>
           </p>
         </div>
-
+          <GoogleOauth/>
         <div className={styles.socialLogin}>
           <p className={styles.socialText}>Or continue with</p>
           <div className={styles.socialButtons}>
@@ -143,6 +146,7 @@ const Login = () => {
                 <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
               </svg>
             </button>
+         
             <button className={`${styles.socialButton} ${styles.github}`}>
               <svg viewBox="0 0 24 24">
                 <path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.24.73-.53v-1.85c-3.03.66-3.67-1.45-3.67-1.45-.5-1.26-1.21-1.6-1.21-1.6-.98-.67.08-.66.08-.66 1.09.08 1.67 1.12 1.67 1.12.97 1.66 2.54 1.18 3.16.9.1-.7.38-1.18.69-1.45-2.42-.27-4.96-1.21-4.96-5.4 0-1.19.42-2.17 1.12-2.93-.11-.28-.49-1.38.11-2.87 0 0 .92-.29 3 1.12.87-.24 1.8-.36 2.73-.37.93 0 1.86.13 2.73.37 2.08-1.41 3-.12 3-.12.6 1.49.22 2.59.11 2.87.7.76 1.12 1.74 1.12 2.93 0 4.2-2.55 5.13-4.98 5.4.39.34.74 1.01.74 2.03v3.01c0 .29.19.63.74.53A11 11 0 0012 1.27" fill="currentColor"/>

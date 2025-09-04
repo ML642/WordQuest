@@ -11,6 +11,7 @@ import Footer from './layout/footer/footer.jsx';
 import Login from './pages/Login/Login.jsx';
 import Registration from "./pages/registration/registration.jsx"
 
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 
 const AppLayout = (props) => {
@@ -38,7 +39,9 @@ const route = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+   <GoogleOAuthProvider>       
     <RouterProvider router={route} />
+    </GoogleOAuthProvider>
   </React.StrictMode>
 );
 
