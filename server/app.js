@@ -6,6 +6,8 @@ const connectDB = require ("./database") ;
 const Word = require ("./models/words") ;
 const allowedOrigins =  ['http://localhost:3000', 'http://localhost:5000'];
 const Auth = require ("./auth") ;
+const Oauth = require ("./Oauth") ;
+
 const PORT  = 5000 ; 
 
 const app =  express() ; 
@@ -35,7 +37,8 @@ const corsOptions = {
 
     },
     methods : ["GET" , "POST" , "PUT" , "DELETE"] ,
-    credentials : true 
+    credentials : true ,
+    
 }
 
 
@@ -47,18 +50,15 @@ app.get('/api/words', async (req, res) => {
   res.json(words);
 });
 app.use (Auth) ;
-// POST add a new word
+app.use (Oauth) ;
+
+
 app.post('/api/words', async (req, res) => {
   const newWord = new Word(req.body);
   await newWord.save();
   res.json(newWord);
 });
 
-app.post("/api/login" , ( req , res ) =>
-{
-    const {username , password , email } = req.body  ; 
-
-})
 
 
 

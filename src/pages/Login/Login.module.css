@@ -330,8 +330,8 @@
 }
 
 .socialButton {
-  width: 48px;
-  height: 48px;
+  width: 96px;
+  height: 96px;
   border-radius: 12px;
   border: 2px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.08);
@@ -344,8 +344,8 @@
 }
 
 .socialButton svg {
-  width: 24px;
-  height: 24px;
+  width: 48px;
+  height: 48px;
   transition: transform 0.2s ease;
 }
 
