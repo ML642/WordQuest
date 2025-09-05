@@ -11,19 +11,19 @@ const LoggedIn = () => {
     const decoded = jwtDecode(token) ;
     console.log(decoded) ; 
     return (
-        <div className={ styles.isLoggedIn} onClick = {() => {setDropdown(true)}} >
+        <div className={ styles.isLoggedIn} onClick = {() => {setDropdown((prev)=>!prev)}} >
            <div className = {styles.userIcon}>  </div>    
            <div className = {styles.userName}> {decoded.userName} </div> 
                {dropdown && <div className={styles.dropdown} onClick={() => {setDropdown(false)}} >
                
-               <motion.div className={styles.dropdownItem} initial={{ x: -40, opacity: 0 }}
+               <motion.div className={styles.dropdownItem} initial={{ x: -40, opacity: 1 }}
                 animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 0.2, duration: 0.3 }} >  
+                transition={{ delay: 0, duration: 0.3 }} >  
                 <Link  to ="/Profile" > Profile </Link>
                 </motion.div>
                  
                  <motion.div className={styles.dropdownItem} 
-                    initial={{ x: 40, opacity: 0 }}
+                    initial={{ x: 40, opacity: 1  }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: 0.6, duration: 0.3 }}  >    
                           <Link to ="/Settings" > Settings </Link> 
@@ -34,6 +34,29 @@ const LoggedIn = () => {
                 localStorage.removeItem("token") ; 
                 window.location.reload() ; 
                }}> Logout </div>
+
+                                        <div
+                        style={{ position : "relative" , bottom : "30px" , right:"-5px"}}
+                        onClick = {(e) => {e.stopPropagation() ; setDropdown((prev)=>!prev) ; }}
+                        className={`w-full py px-4 flex items-center justify-center text-gray-600 hover:text-gray-800 hover:bg-gray-50 transition-colors duration-150 border-t border-gray-200`}
+                        aria-label="Close dropdown"
+                        >
+                        <svg
+                            width="120"
+                            height="38"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                            d="M7 14L12 9L17 14"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            />
+                        </svg> 
+                        </div>
              </div>
              }
         </div>

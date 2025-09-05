@@ -156,3 +156,12 @@
     background : rgba(255, 255, 255, 0.15) ;
     color : white
 }
+
+.dropdownItem * {
+    text-decoration : none ;
+    color :rgba(255, 255, 255, 0.49) ;
+}
+.dropdownItem:hover  * {
+     color : white ; 
+}
+
