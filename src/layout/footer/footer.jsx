@@ -38,20 +38,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div className={styles.bottomSection}>
-          <p className={styles.copyright}>© 2024 VocabMaster. All rights reserved.</p>
-          <div className={styles.socialLinks}>
-            <a href="#" className={styles.socialLink}>
-              <Twitter className={styles.socialIcon} />
-            </a>
-            <a href="#" className={styles.socialLink}>
-              <Github className={styles.socialIcon} />
-            </a>
-            <a href="#" className={styles.socialLink}>
-              <Mail className={styles.socialIcon} />
-            </a>
-          </div>
-        </div>
+
       </div>
     </footer>
   );

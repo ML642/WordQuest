@@ -1,22 +1,26 @@
 .container {
-   width : 100% ;
-   position:fixed ; 
-   height :10vh;
-   color : white  ;
-   z-index:1 ;
-   background : rgba(255, 255, 255, 0.15) ; 
-   backdrop-filter : blur(10px) ;
-   -webkit-backdrop-filter: blur(10px)  ;
-   border : 1px solid rgba(0 ,0 ,0 ,0.15) ; 
-   box-shadow : 4px 4px 32px rgba(235, 1, 59, 0.4) ;
-
-   display :flex ;
-   justify-content: space-around;
-   align-items :center
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 72px;
+    padding: 0.65rem 1.2rem;
+    box-sizing: border-box;
+    color: white;
+    z-index: 30;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 4px 4px 32px rgba(235, 1, 59, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
 }
 
 .logo {
-    font-size: 2rem;
+    font-size: clamp(1.4rem, 2.1vw, 2rem);
     font-weight: bold;
     background-size: 200% auto;
     background-image: linear-gradient(
@@ -32,136 +36,286 @@
     color: transparent;
     animation: Logo 8s linear infinite;
     transition: all 0.3s ease-in-out;
-}
-
-.container div {
-    margin: 1rem;
+    white-space: nowrap;
 }
 
 @keyframes Logo {
     0% {
         background-position: 0% center;
     }
+
     100% {
         background-position: -200% center;
     }
 }
 
-.navigator {
-    display :flex ; 
-    width : 52%;
-    justify-content : space-around  ;
-    align-items : center ;
-    margin-right: 5rem ;
+.menuToggle {
+    display: none;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 0.5rem;
+    padding: 0.38rem;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 4px;
 }
 
-.Link{
-    font-size: large;
-    text-decoration:none ;
-    color : white  ; 
-    transition:all 0.3s ease-in-out ;
+.menuIconLine {
+    width: 18px;
+    height: 2px;
+    background: #fff;
+    border-radius: 999px;
+}
+
+.navigator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.1rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.Link {
+    display: block;
+    padding: 0.25rem 0.35rem;
+    font-size: 1rem;
+    text-decoration: none;
+    color: white;
+    white-space: nowrap;
+    transition: all 0.3s ease-in-out;
 }
 
 .Link:hover {
-    color :#463fd1
+    color: #463fd1;
 }
+
+.authSlot {
+    flex-shrink: 0;
+}
+
 .loginButton {
-
-    width : 10rem ;  
-    height: 2rem  ;
-    display : flex ;
-    justify-content : center ;
-    align-items : center ;
-    font-weight : 1000 ;
-
-    border-radius : 1rem ;
-    border : 1px solid white ;
-    background : rgba(255, 255, 255, 0.05) ; 
-    backdrop-filter : blur(10px) ;
-    -webkit-backdrop-filter: blur(10px)  ;
-    color : white ;
-    cursor : pointer ;
-    transition: all 0.3s ease-in-out ;
+    width: 9rem;
+    height: 2.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 800;
+    border-radius: 1rem;
+    border: 1px solid white;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
 }
 
 .loginButton:hover {
-    transform : scale(1.05) ; 
-    
-    box-shadow :#463fd1 0px 0px 8px 2px ;
-    background : rgba(255, 255, 255, 0.15) ;
+    transform: scale(1.05);
+    box-shadow: #463fd1 0px 0px 8px 2px;
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .isLoggedIn {
-    width : 10rem ;  
-    height: 3rem  ;
-    display : flex ;
-    justify-content : space-between ;
-    align-items : center ;
-    font-weight : 1000 ;
-
-    
-    border : 1px solid white ;
-    background : rgba(255, 255, 255, 0.05) ; 
-    backdrop-filter : blur(10px) ;
-    -webkit-backdrop-filter: blur(10px)  ;
-    color : white ;
-    cursor : pointer ;
-    transition: all 0.3s ease-in-out ;
+    width: 10rem;
+    height: 2.7rem;
+    padding: 0 0.55rem;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 700;
+    border-radius: 1rem;
+    border: 1px solid white;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    position: relative;
 }
 
 .userIcon {
-    width : 1.5rem ;
-    height : 1.5rem ;
-    border-radius : 50% ;
-    background : url("https://cdn-icons-png.flaticon.com/512/149/149071.png") no-repeat center ;
-    background-size : cover ;
-    margin-right : 0.5rem ;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: url("https://cdn-icons-png.flaticon.com/512/149/149071.png") no-repeat center;
+    background-size: cover;
+    flex-shrink: 0;
 }
+
 .userName {
-    font-size : 1rem ;
-    margin-right : 0.5rem ;
-    height : 1.5rem ; 
-
-
-    font-weight: 500; 
+    font-size: 0.95rem;
+    font-weight: 500;
     overflow: hidden;
-
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-left: 0.45rem;
+    margin-right: 0.2rem;
+    min-width: 0;
+    flex: 1;
 }
+
 .dropdown {
-    position : absolute ; 
-    display : flex  ;
+    position: absolute;
+    top: calc(100% + 0.45rem);
+    right: 0;
+    display: flex;
     flex-direction: column;
-
-    width:15rem;
-    height: 15rem;
-    top : 6vh ;
-    left : -10% ;
-    width : 10rem ;
-    background : rgba(39, 34, 34, 0.785) ;
-
-    z-index: 1;
+    width: 12rem;
+    background: rgba(39, 34, 34, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.7rem;
+    overflow: hidden;
+    z-index: 120;
 }
+
 .dropdownItem {
-    margin: 1rem ;
-    padding : 0.5rem ;
-    text-decoration : none ;
-    color :rgba(255, 255, 255, 0.49) ;
-    cursor : pointer ;
-    transition: all 0.3s ease-in-out ;
-    text-align : center ;
-    font-weight : 500 ;
+    margin: 0;
+    padding: 0.65rem 0.75rem;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.72);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    text-align: left;
+    font-weight: 500;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .dropdownItem:hover {
-    background : rgba(255, 255, 255, 0.15) ;
-    color : white
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
 }
 
 .dropdownItem * {
-    text-decoration : none ;
-    color :rgba(255, 255, 255, 0.49) ;
+    text-decoration: none;
+    color: inherit;
 }
-.dropdownItem:hover  * {
-     color : white ; 
+
+.dropdownClose {
+    height: 2.1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.78);
+    cursor: pointer;
+}
+
+.dropdownClose:hover {
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+}
+
+@media (max-width: 980px) {
+    .container {
+        min-height: 64px;
+        padding: 0.55rem 0.8rem;
+    }
+
+    .menuToggle {
+        display: flex;
+        margin-left: auto;
+    }
+
+    .navigator {
+        position: absolute;
+        top: calc(100% + 0.35rem);
+        left: 0.8rem;
+        right: 0.8rem;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.25rem;
+        padding: 0.65rem;
+        border: 1px solid rgba(148, 163, 184, 0.28);
+        border-radius: 0.7rem;
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 16px 34px rgba(0, 0, 0, 0.35);
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-8px);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        z-index: 110;
+    }
+
+    .navigator > div {
+        margin: 0;
+    }
+
+    .navigatorOpen {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+    }
+
+    .Link {
+        width: 100%;
+        box-sizing: border-box;
+        border-radius: 0.5rem;
+        padding: 0.5rem 0.65rem;
+    }
+
+    .Link:hover {
+        color: white;
+        background: rgba(99, 102, 241, 0.24);
+    }
+
+    .authSlot {
+        margin-left: 0;
+    }
+
+    .loginButton {
+        width: 7.1rem;
+        height: 2rem;
+        font-size: 0.83rem;
+    }
+
+    .isLoggedIn {
+        width: 8.4rem;
+        height: 2.5rem;
+    }
+
+    .dropdown {
+        right: 0;
+        width: 10.5rem;
+    }
+}
+
+@media (max-width: 520px) {
+    .logo {
+        font-size: 1.25rem;
+    }
+
+    .menuToggle {
+        padding: 0.32rem;
+    }
+
+    .menuIconLine {
+        width: 16px;
+    }
+
+    .loginButton {
+        width: 6.4rem;
+    }
+
+    .isLoggedIn {
+        width: 7.4rem;
+        padding: 0 0.38rem;
+    }
+
+    .userIcon {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+
+    .userName {
+        font-size: 0.82rem;
+        margin-left: 0.3rem;
+    }
 }
 
