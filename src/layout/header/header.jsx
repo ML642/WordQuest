@@ -134,7 +134,7 @@ const Header = () => {
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: 0.8, duration: 1 }}
                 >
-                    <Link className={styles.Link} to="/About">About</Link>
+                    <Link className={styles.Link} to="/Testing">Testing</Link>
                 </motion.div>
             </nav>
 

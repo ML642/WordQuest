@@ -207,6 +207,21 @@
     border-radius: 0.55rem;
     padding: 0.5rem 0.6rem;
     font-size: 0.92rem;
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    color-scheme: dark;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fieldSelect:focus {
+    border-color: rgba(129, 140, 248, 0.7);
+    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15);
+}
+
+.fieldSelect option {
+    background-color: #0f172a;
+    color: #e2e8f0;
 }
 
 .setupActions {
