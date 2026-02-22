@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import styles from "./wordArch.module.css";
 
 const SESSION_SIZE_OPTIONS = [20, 40, 80, 120];
@@ -204,8 +204,88 @@ const LevelBlocks = ({ onSelectLevel, selectedLevel }) => (
     </div>
 );
 
+const SetupSelect = ({ id, value, options, onChange }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const rootRef = useRef(null);
+
+    const selectedOption = options.find((option) => String(option.value) === String(value)) || options[0];
+
+    useEffect(() => {
+        if (!isOpen) {
+            return;
+        }
+
+        const handleOutsideClick = (event) => {
+            if (!rootRef.current || rootRef.current.contains(event.target)) {
+                return;
+            }
+            setIsOpen(false);
+        };
+
+        const handleEscape = (event) => {
+            if (event.key === "Escape") {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleOutsideClick);
+        document.addEventListener("touchstart", handleOutsideClick, { passive: true });
+        document.addEventListener("keydown", handleEscape);
+
+        return () => {
+            document.removeEventListener("mousedown", handleOutsideClick);
+            document.removeEventListener("touchstart", handleOutsideClick);
+            document.removeEventListener("keydown", handleEscape);
+        };
+    }, [isOpen]);
+
+    return (
+        <div ref={rootRef} className={styles.customSelect}>
+            <button
+                id={id}
+                type="button"
+                className={`${styles.fieldSelectButton} ${isOpen ? styles.fieldSelectOpen : ""}`}
+                aria-haspopup="listbox"
+                aria-expanded={isOpen}
+                onClick={() => setIsOpen((prev) => !prev)}
+            >
+                <span>{selectedOption ? selectedOption.label : ""}</span>
+                <span className={styles.selectChevron} aria-hidden="true">
+                    v
+                </span>
+            </button>
+
+            {isOpen && (
+                <ul className={styles.fieldOptions} role="listbox" aria-labelledby={id}>
+                    {options.map((option) => {
+                        const isSelected = String(option.value) === String(value);
+                        return (
+                            <li key={option.value}>
+                                <button
+                                    type="button"
+                                    className={`${styles.fieldOptionButton} ${isSelected ? styles.fieldOptionSelected : ""}`}
+                                    onClick={() => {
+                                        onChange(option.value);
+                                        setIsOpen(false);
+                                    }}
+                                >
+                                    {option.label}
+                                </button>
+                            </li>
+                        );
+                    })}
+                </ul>
+            )}
+        </div>
+    );
+};
+
 const SessionSetupMenu = ({ level, config, onChange, onCancel, onStart }) => {
     const levelMeta = getLevelMeta(level);
+    const sessionSizeOptions = SESSION_SIZE_OPTIONS.map((size) => ({
+        value: size,
+        label: `${size} words`
+    }));
 
     return (
         <div className={styles.setupOverlay} onClick={onCancel}>
@@ -220,54 +300,36 @@ const SessionSetupMenu = ({ level, config, onChange, onCancel, onStart }) => {
                         <label className={styles.fieldLabel} htmlFor="menu-time-limit">
                             Time
                         </label>
-                        <select
+                        <SetupSelect
                             id="menu-time-limit"
-                            className={styles.fieldSelect}
                             value={config.timeLimit}
-                            onChange={(event) => onChange("timeLimit", event.target.value)}
-                        >
-                            {TIME_LIMIT_OPTIONS.map((option) => (
-                                <option key={option.value} value={option.value}>
-                                    {option.label}
-                                </option>
-                            ))}
-                        </select>
+                            options={TIME_LIMIT_OPTIONS}
+                            onChange={(nextValue) => onChange("timeLimit", nextValue)}
+                        />
                     </div>
 
                     <div className={styles.fieldGroup}>
                         <label className={styles.fieldLabel} htmlFor="menu-word-count">
                             Words
                         </label>
-                        <select
+                        <SetupSelect
                             id="menu-word-count"
-                            className={styles.fieldSelect}
                             value={config.wordCount}
-                            onChange={(event) => onChange("wordCount", Number(event.target.value))}
-                        >
-                            {SESSION_SIZE_OPTIONS.map((size) => (
-                                <option key={size} value={size}>
-                                    {size} words
-                                </option>
-                            ))}
-                        </select>
+                            options={sessionSizeOptions}
+                            onChange={(nextValue) => onChange("wordCount", Number(nextValue))}
+                        />
                     </div>
 
                     <div className={styles.fieldGroup}>
                         <label className={styles.fieldLabel} htmlFor="menu-order">
                             Extra: order
                         </label>
-                        <select
+                        <SetupSelect
                             id="menu-order"
-                            className={styles.fieldSelect}
                             value={config.order}
-                            onChange={(event) => onChange("order", event.target.value)}
-                        >
-                            {ORDER_OPTIONS.map((option) => (
-                                <option key={option.value} value={option.value}>
-                                    {option.label}
-                                </option>
-                            ))}
-                        </select>
+                            options={ORDER_OPTIONS}
+                            onChange={(nextValue) => onChange("order", nextValue)}
+                        />
                     </div>
                 </div>
 

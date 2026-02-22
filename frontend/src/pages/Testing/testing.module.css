@@ -1,5 +1,7 @@
 .page {
     min-height: 100vh;
+    width: 100%;
+    box-sizing: border-box;
     padding: 14vh 1.1rem 2rem;
     background: radial-gradient(circle at 20% 20%, #1b2948 0%, #081127 58%, #050a18 100%);
     color: #e2e8f0;
@@ -27,6 +29,7 @@
 .testCard,
 .resultCard {
     width: min(960px, 100%);
+    box-sizing: border-box;
     margin: 0 auto;
     border-radius: 1rem;
     border: 1px solid rgba(129, 140, 248, 0.2);
@@ -263,7 +266,32 @@
 
 @media (max-width: 760px) {
     .page {
-        padding-top: 12vh;
+        padding: 11vh 0.8rem 1.4rem;
+    }
+
+    .subtitle {
+        font-size: 0.92rem;
+    }
+
+    .statusCard,
+    .errorCard,
+    .testCard,
+    .resultCard {
+        padding: 0.85rem;
+    }
+
+    .testHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.45rem;
+    }
+
+    .scoreBadge {
+        font-size: 0.78rem;
+    }
+
+    .wordBlock {
+        padding: 0.85rem;
     }
 
     .actions {
@@ -276,5 +304,39 @@
 
     .levelRow {
         grid-template-columns: 44px 1fr;
+        row-gap: 0.1rem;
+    }
+
+    .levelRow span:last-child {
+        grid-column: 2;
+        color: #b7c3d6;
+    }
+
+    .resultGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .restartButton {
+        width: 100%;
+    }
+}
+
+@media (max-width: 420px) {
+    .page {
+        padding: 10vh 0.65rem 1rem;
+    }
+
+    .word {
+        font-size: clamp(1.45rem, 8.5vw, 1.9rem);
+    }
+
+    .answerButton,
+    .restartButton {
+        padding: 0.58rem 0.72rem;
+        font-size: 0.88rem;
+    }
+
+    .wordTag {
+        font-size: 0.76rem;
     }
 }

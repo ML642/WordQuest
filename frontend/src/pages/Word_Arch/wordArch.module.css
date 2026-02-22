@@ -200,6 +200,95 @@
     font-weight: 600;
 }
 
+.customSelect {
+    position: relative;
+}
+
+.fieldSelectButton {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 42px;
+    border-radius: 0.55rem;
+    border: 1px solid rgba(99, 102, 241, 0.35);
+    background: rgba(15, 23, 42, 0.8);
+    color: #e2e8f0;
+    padding: 0.5rem 0.65rem;
+    font-size: 0.92rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.fieldSelectButton:hover {
+    background: rgba(30, 41, 59, 0.88);
+    border-color: rgba(129, 140, 248, 0.48);
+}
+
+.fieldSelectOpen {
+    border-color: rgba(129, 140, 248, 0.78);
+    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.16);
+}
+
+.selectChevron {
+    color: #c7d2fe;
+    font-size: 0.78rem;
+    transform-origin: center;
+    transition: transform 0.2s ease;
+    margin-left: 0.5rem;
+    flex-shrink: 0;
+}
+
+.fieldSelectOpen .selectChevron {
+    transform: rotate(180deg);
+}
+
+.fieldOptions {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    left: 0;
+    right: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0.35rem;
+    border-radius: 0.7rem;
+    border: 1px solid rgba(129, 140, 248, 0.35);
+    background: rgba(15, 23, 42, 0.98);
+    box-shadow: 0 14px 30px rgba(2, 6, 23, 0.58);
+    backdrop-filter: blur(8px);
+    z-index: 80;
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+.fieldOptionButton {
+    width: 100%;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+    background: transparent;
+    color: #dbe4ff;
+    padding: 0.45rem 0.55rem;
+    text-align: left;
+    font-size: 0.94rem;
+    cursor: pointer;
+    transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.fieldOptionButton:hover {
+    background: rgba(99, 102, 241, 0.18);
+    border-color: rgba(99, 102, 241, 0.3);
+    color: #eef2ff;
+}
+
+.fieldOptionSelected {
+    background: rgba(79, 70, 229, 0.28);
+    border-color: rgba(129, 140, 248, 0.45);
+    color: #eef2ff;
+}
+
 .fieldSelect {
     background: rgba(15, 23, 42, 0.8);
     border: 1px solid rgba(99, 102, 241, 0.35);
