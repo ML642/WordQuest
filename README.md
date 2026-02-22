@@ -1,70 +1,103 @@
-# Getting Started with Create React App
+# WordQuest
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+WordQuest is an English vocabulary learning app with a React frontend and a Node.js/Express backend.
 
-## Available Scripts
+## Project Structure
 
-In the project directory, you can run:
+- `frontend/` React application
+- `server/` Express API and MongoDB integration
 
-### `npm start`
+## Main Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Word Archive practice by CEFR level
+- Collocations page with filtering
+- Testing page with random words and level-based scoring
+- Email/password login and registration
+- Optional Google OAuth login
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Requirements
 
-### `npm test`
+- Node.js 18 or newer
+- npm
+- MongoDB database
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Setup
 
-### `npm run build`
+### 1) Backend
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+cd server
+npm install
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Create `server/.env`:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```env
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+```
 
-### `npm run eject`
+Start backend:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+npm start
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Backend runs on `http://localhost:5000`.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### 2) Frontend
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+cd frontend
+npm install
+```
 
-## Learn More
+Create `frontend/.env`:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```env
+REACT_APP_GOOGLE_CLIENT_ID=your_google_client_id
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Start frontend:
 
-### Code Splitting
+```bash
+npm start
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Frontend runs on `http://localhost:3000`.
 
-### Analyzing the Bundle Size
+## Frontend Routes
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- `/` Home
+- `/WordArch` Word Archive
+- `/collocations` Collocations
+- `/Testing` Testing
+- `/Login` Login
+- `/Registration` Registration
 
-### Making a Progressive Web App
+## Backend Endpoints
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- `GET /` API health check
+- `POST /api/register`
+- `POST /api/login`
+- `GET /api/userInfo`
+- `GET /api/words`
+- `POST /api/words`
+- `POST /api/auth/google`
 
-### Advanced Configuration
+## Scripts
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Frontend (`frontend/package.json`):
+- `npm start`
+- `npm run build`
+- `npm test`
 
-### Deployment
+Backend (`server/package.json`):
+- `npm start`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Notes
 
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- If `REACT_APP_GOOGLE_CLIENT_ID` is missing, the Google login button is disabled.
+- If you change environment variables, restart the corresponding dev server.
