@@ -94,23 +94,26 @@ export default function Home() {
       <main className={style.container}>
         <motion.section 
           className={style.hero}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.25 }}
           transition={{ duration: 0.8 }}
         >
           <motion.div 
-            className={`${style.heroContent} ${style.glowEffect}`}
+            className={style.heroContent}
             initial={{ x: -50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.8 }}
           >
+        
             <motion.h1 
               className={style.title}
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.4, duration: 0.8 }}
             >
-              VocabMaster
+              Build confident English with{" "}
+              <span className={style.titleAccent}>VocabMaster</span>
             </motion.h1>
             <motion.p 
               className={style.subtitle}
@@ -118,8 +121,48 @@ export default function Home() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.8 }}
             >
-              Enhance your English vocabulary with our smart learning system
+              Enhance your English vocabulary with our{" "}
+              <span className={style.textHighlight}>smart learning system</span>{" "}
+              and <span className={style.textHighlightSoft}>daily practice flow</span>.
             </motion.p>
+            <motion.p
+              className={style.subtitleLead}
+              initial={{ y: 16, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.68, duration: 0.65 }}
+            >
+              Start with practical words you can use immediately in conversations,
+              school, and professional writing.
+            </motion.p>
+            <motion.div
+              className={style.heroHighlights}
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.72, duration: 0.6 }}
+            >
+              <span className={style.highlightPill}>Context-first learning</span>
+              <span className={style.highlightPill}>Quick daily sessions</span>
+              <span className={style.highlightPill}>Visible progress</span>
+            </motion.div>
+            <motion.div
+              className={style.heroSignalRow}
+              initial={{ y: 14, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.78, duration: 0.6 }}
+            >
+              <div className={style.heroSignal}>
+                <span className={style.heroSignalTitle}>Word of the Day</span>
+                <span className={style.heroSignalMeta}>Usage + quick memory tip</span>
+              </div>
+              <div className={style.heroSignal}>
+                <span className={style.heroSignalTitle}>3 Smart Quizzes</span>
+                <span className={style.heroSignalMeta}>Built from your weak spots</span>
+              </div>
+              <div className={style.heroSignal}>
+                <span className={style.heroSignalTitle}>Weekly Milestone</span>
+                <span className={style.heroSignalMeta}>Track growth in minutes</span>
+              </div>
+            </motion.div>
             <motion.div 
               className={style.heroCtas}
               initial={{ y: 20, opacity: 0 }}
@@ -214,6 +257,7 @@ export default function Home() {
                 Daily Exercises
               </motion.span>
             </motion.div>
+            <p className={style.statsFootnote}>Built to keep your learning streak consistent.</p>
           </motion.div>
         </motion.section>
 
@@ -221,7 +265,7 @@ export default function Home() {
           className={style.features}
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: false, amount: 0.2 }}
           transition={{ duration: 0.8 }}
         >
         </motion.section>
@@ -230,14 +274,14 @@ export default function Home() {
           className={style.howItWorks}
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: false, amount: 0.2 }}
           transition={{ duration: 0.8 }}
         >
           <motion.h2 
             className={style.sectionTitle}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false, amount: 0.5 }}
             transition={{ delay: 0.2, duration: 0.6 }}
           >
             How It Works
@@ -247,7 +291,7 @@ export default function Home() {
             variants={stagger}
             initial="initial"
             whileInView="animate"
-            viewport={{ once: true }}
+            viewport={{ once: false, amount: 0.2 }}
           >
             {[
               {
@@ -286,7 +330,7 @@ export default function Home() {
                   className={style.stepNumber}
                   initial={{ scale: 0 }}
                   whileInView={{ scale: 1 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false, amount: 0.5 }}
                   transition={{ delay: 0.2 * index, type: "spring", stiffness: 200 }}
                 >
                   {step.number}
@@ -294,7 +338,7 @@ export default function Home() {
                 <motion.h3
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false, amount: 0.5 }}
                   transition={{ delay: 0.3 * index }}
                 >
                   {step.title}
@@ -302,7 +346,7 @@ export default function Home() {
                 <motion.p
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false, amount: 0.5 }}
                   transition={{ delay: 0.4 * index }}
                 >
                   {step.description}
@@ -312,7 +356,13 @@ export default function Home() {
           </motion.div>
         </motion.section>
 
-        <section className={style.benefits}>
+        <motion.section
+          className={style.benefits}
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.8 }}
+        >
           <h2 className={style.sectionTitle}>Learning Benefits</h2>
           <div className={style.benefitsGrid}>
             <TiltCard className={style.benefitCard}>
@@ -352,11 +402,17 @@ export default function Home() {
               </div>
             </TiltCard>
           </div>
-        </section>
+        </motion.section>
 
         
 
-        <section className={style.gamification}>
+        <motion.section
+          className={style.gamification}
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.8 }}
+        >
           <h2 className={style.sectionTitle}>Make Learning Fun</h2>
           <div className={style.achievementsShowcase}>
             <TiltCard className={style.achievement}>
@@ -387,56 +443,135 @@ export default function Home() {
               <span className={style.progressText}>6/7</span>
             </TiltCard>
           </div>
-        </section>
+        </motion.section>
 
         <motion.section 
           className={style.cta}
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: false, amount: 0.2 }}
           transition={{ duration: 0.8 }}
         >
-          <motion.h2
+          <motion.div
+            className={style.ctaGrid}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
+            viewport={{ once: false, amount: 0.35 }}
+            transition={{ delay: 0.1, duration: 0.6 }}
           >
-            Ready to Expand Your Vocabulary?
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.4 }}
-          >
-            Join thousands of learners improving their English every day
-          </motion.p>
-          <motion.button 
-            className={style.primaryBtn}
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            whileHover={{ 
-              scale: 1.05,
-              boxShadow: "0 0 25px rgba(59, 130, 246, 0.5)"
-            }}
-            whileTap={{ scale: 0.95 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.6, type: "spring", stiffness: 300 }}
-          >
-            Start Learning Now
-          </motion.button>
-          <motion.p 
-            className={style.ctaNote}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.8 }}
-          >
-            No credit card required • Free plan available
-          </motion.p>
+            <motion.div
+              className={style.ctaMessage}
+              initial={{ opacity: 0, x: -18 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: false, amount: 0.35 }}
+              transition={{ delay: 0.18, duration: 0.6 }}
+            >
+              <motion.span
+                className={style.ctaEyebrow}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.5 }}
+                transition={{ delay: 0.2 }}
+              >
+                5-minute daily sprint
+              </motion.span>
+              <motion.h2
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.5 }}
+                transition={{ delay: 0.28 }}
+              >
+                Build useful vocabulary,
+                <span className={style.ctaAccent}> then use it the same day.</span>
+              </motion.h2>
+              <motion.p
+                className={style.ctaLead}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.5 }}
+                transition={{ delay: 0.36 }}
+              >
+                Every session is short and practical: new words in context, a quick
+                challenge, and a focused review from yesterday&apos;s mistakes.
+              </motion.p>
+              <motion.div
+                className={style.ctaActions}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.5 }}
+                transition={{ delay: 0.48 }}
+              >
+                <motion.button 
+                  className={`${style.primaryBtn} ${style.ctaPrimaryBtn}`}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.96 }}
+                >
+                  Start learning now
+                </motion.button>
+                <motion.button
+                  className={style.ctaGhostBtn}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  See sample lesson
+                </motion.button>
+              </motion.div>
+              <motion.div
+                className={style.ctaTrustRow}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, amount: 0.5 }}
+                transition={{ delay: 0.56 }}
+              >
+               
+              </motion.div>
+            </motion.div>
+
+            <motion.aside
+              className={style.ctaPlanCard}
+              initial={{ opacity: 0, x: 18 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: false, amount: 0.35 }}
+              transition={{ delay: 0.24, duration: 0.6 }}
+            >
+              <p className={style.ctaPlanLabel}>Today&apos;s plan</p>
+              <ul className={style.ctaPlanList}>
+                <li className={style.ctaPlanItem}>
+                  <span className={style.ctaPlanTime}>01:30</span>
+                  <div className={style.ctaPlanCopy}>
+                    <h3>Context Drill</h3>
+                    <p>Learn words inside a mini conversation.</p>
+                  </div>
+                </li>
+                <li className={style.ctaPlanItem}>
+                  <span className={style.ctaPlanTime}>02:00</span>
+                  <div className={style.ctaPlanCopy}>
+                    <h3>Quick Challenge</h3>
+                    <p>Pick the right word for real sentence prompts.</p>
+                  </div>
+                </li>
+                <li className={style.ctaPlanItem}>
+                  <span className={style.ctaPlanTime}>01:30</span>
+                  <div className={style.ctaPlanCopy}>
+                    <h3>Memory Review</h3>
+                    <p>Lock in today&apos;s words with one short recall round.</p>
+                  </div>
+                </li>
+              </ul>
+              <motion.p 
+                className={style.ctaNote}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: false, amount: 0.5 }}
+                transition={{ delay: 0.64 }}
+              >
+         
+              </motion.p>
+            </motion.aside>
+          </motion.div>
         </motion.section>
       </main>
     </div>
   );
 }
+
