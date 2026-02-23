@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import style from "./home.module.css";
 // @ts-ignore
 import FOG from "vanta/dist/vanta.fog.min";
 import * as THREE from "three";
 import TiltCard from "../../components/tiltCard.jsx";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -89,8 +89,9 @@ export default function Home() {
   }, []);
 
   return (
-    <div  className={style.pageWrapper}  ref={vantaRef}>
-      <main className={style.container}  >
+    <div className={style.pageWrapper}>
+      <div className={style.vantaLayer} ref={vantaRef} />
+      <main className={style.container}>
         <motion.section 
           className={style.hero}
           initial={{ opacity: 0 }}
@@ -223,64 +224,6 @@ export default function Home() {
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8 }}
         >
-          <motion.h2 
-            className={style.sectionTitle}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-          >
-            Key Features
-          </motion.h2>
-          <motion.div 
-            className={style.featureGrid}
-            variants={stagger}
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true }}
-          >
-            {[
-              {
-                icon: "📚",
-                title: "Smart Learning",
-                description: "Personalized word lists based on your level and progress"
-              },
-              {
-                icon: "🎯",
-                title: "Daily Practice",
-                description: "Short, focused sessions to build lasting vocabulary"
-              },
-              {
-                icon: "🔄",
-                title: "Spaced Repetition",
-                description: "Review words at optimal intervals for better retention"
-              },
-              {
-                icon: "📊",
-                title: "Progress Tracking",
-                description: "Detailed insights into your learning journey"
-              }
-            ].map((feature, index) => (
-              <motion.div
-                key={index}
-                variants={fadeInUp}
-                custom={index}
-                transition={{ duration: 0.5 }}
-              >
-                <TiltCard className={style.featureCard}>
-                  <motion.div 
-                    className={style.featureIcon}
-                    whileHover={{ scale: 1.2, rotate: 360 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                  >
-                    {feature.icon}
-                  </motion.div>
-                  <h3>{feature.title}</h3>
-                  <p>{feature.description}</p>
-                </TiltCard>
-              </motion.div>
-            ))}
-          </motion.div>
         </motion.section>
 
         <motion.section 

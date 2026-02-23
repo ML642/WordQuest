@@ -1,0 +1,97 @@
+:root {
+  --sb-size: 11px;
+  --sb-track: rgba(11, 19, 36, 0.72);
+  --sb-track-edge: rgba(148, 163, 184, 0.2);
+  --sb-thumb-top: rgba(226, 232, 240, 0.92);
+  --sb-thumb-mid: rgba(125, 211, 252, 0.9);
+  --sb-thumb-bottom: rgba(56, 189, 248, 0.86);
+  --sb-thumb-active: rgba(14, 165, 233, 0.94);
+}
+
+html,
+body,
+#root,
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--sb-thumb-mid) var(--sb-track);
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+#root::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: var(--sb-size);
+  height: var(--sb-size);
+  background: transparent;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
+#root::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track {
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.38) 0%, var(--sb-track) 100%);
+  border: 1px solid var(--sb-track-edge);
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.22);
+}
+
+html::-webkit-scrollbar-track-piece,
+body::-webkit-scrollbar-track-piece,
+#root::-webkit-scrollbar-track-piece,
+*::-webkit-scrollbar-track-piece {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
+#root::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--sb-thumb-top) 0%, var(--sb-thumb-mid) 45%, var(--sb-thumb-bottom) 100%);
+  border-radius: 999px;
+  border: 2px solid rgba(9, 15, 30, 0.58);
+  min-height: 52px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.56), 0 6px 18px rgba(14, 165, 233, 0.34);
+}
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover,
+#root::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(248, 250, 252, 0.98) 0%, rgba(186, 230, 253, 0.98) 45%, rgba(56, 189, 248, 0.98) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 8px 20px rgba(14, 165, 233, 0.42);
+}
+
+html::-webkit-scrollbar-thumb:active,
+body::-webkit-scrollbar-thumb:active,
+#root::-webkit-scrollbar-thumb:active,
+*::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(180deg, rgba(186, 230, 253, 0.98) 0%, var(--sb-thumb-active) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42), 0 4px 14px rgba(14, 165, 233, 0.28);
+}
+
+html::-webkit-scrollbar-button,
+body::-webkit-scrollbar-button,
+#root::-webkit-scrollbar-button,
+*::-webkit-scrollbar-button,
+html::-webkit-scrollbar-button:single-button,
+body::-webkit-scrollbar-button:single-button,
+#root::-webkit-scrollbar-button:single-button,
+*::-webkit-scrollbar-button:single-button {
+  display: none;
+  width: 0;
+  height: 0;
+  background: transparent;
+}
+
+html::-webkit-scrollbar-corner,
+body::-webkit-scrollbar-corner,
+#root::-webkit-scrollbar-corner,
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --sb-size: 9px;
+  }
+}
