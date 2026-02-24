@@ -37,6 +37,17 @@ MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_REDIRECT_URI=postmessage
+
+# Optional resilience/tuning
+MONGODB_FALLBACK_URI=mongodb://127.0.0.1:27017/wordquest
+MONGODB_CONNECT_RETRIES=2
+MONGODB_CONNECT_RETRY_DELAY_MS=1500
+MONGODB_SERVER_SELECTION_TIMEOUT_MS=12000
+
+# Optional auth throttling
+LOGIN_LIMIT_WINDOW_MS=900000
+LOGIN_LIMIT_MAX_ATTEMPTS=10
 ```
 
 Start backend:
@@ -80,6 +91,7 @@ Frontend runs on `http://localhost:3000`.
 ## Backend Endpoints
 
 - `GET /` API health check
+- `GET /api/health` runtime + database state
 - `POST /api/register`
 - `POST /api/login`
 - `GET /api/userInfo`

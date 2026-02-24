@@ -1,157 +1,253 @@
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./header.module.css";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { motion } from "framer-motion";
 import { jwtDecode } from "jwt-decode";
 
-const LoggedIn = () => {
-    const token = localStorage.getItem("token");
-    const [dropdown, setDropdown] = useState(false);
-    let userName = "User";
+const AUTH_EVENT = "auth-state-changed";
 
+const readStoredAuth = () => {
+  const localToken = localStorage.getItem("token");
+  const sessionToken = sessionStorage.getItem("token");
+  const token = localToken || sessionToken || "";
+
+  const localUser = localStorage.getItem("user");
+  const sessionUser = sessionStorage.getItem("user");
+  const userRaw = localUser || sessionUser;
+
+  let user = null;
+  if (userRaw) {
     try {
-        const decoded = jwtDecode(token);
-        userName = decoded?.userName || "User";
+      user = JSON.parse(userRaw);
     } catch {
-        userName = "User";
+      user = null;
     }
-    return (
-        <div className={styles.isLoggedIn} onClick={() => { setDropdown((prev) => !prev); }}>
-            <div className={styles.userIcon} />
-            <div className={styles.userName}>{userName}</div>
-            {dropdown && (
-                <div className={styles.dropdown} onClick={() => { setDropdown(false); }}>
-                    <motion.div
-                        className={styles.dropdownItem}
-                        initial={{ x: -40, opacity: 1 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        transition={{ delay: 0, duration: 0.3 }}
-                    >
-                        <Link to="/Profile">Profile</Link>
-                    </motion.div>
+  }
 
-                    <motion.div
-                        className={styles.dropdownItem}
-                        initial={{ x: 40, opacity: 1 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        transition={{ delay: 0.6, duration: 0.3 }}
-                    >
-                        <Link to="/Settings">Settings</Link>
-                    </motion.div>
+  let decoded = null;
+  if (token) {
+    try {
+      decoded = jwtDecode(token);
+    } catch {
+      decoded = null;
+    }
+  }
 
-                    <div
-                        className={styles.dropdownItem}
-                        onClick={() => {
-                            localStorage.removeItem("token");
-                            window.location.reload();
-                        }}
-                    >
-                        Logout
-                    </div>
+  return {
+    token,
+    user,
+    decoded
+  };
+};
 
-                    <button
-                        type="button"
-                        className={styles.dropdownClose}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            setDropdown((prev) => !prev);
-                        }}
-                        aria-label="Close dropdown"
-                    >
-                        <svg
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                                d="M7 14L12 9L17 14"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            />
-                        </svg>
-                    </button>
-                </div>
-            )}
+const clearStoredAuth = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  sessionStorage.removeItem("token");
+  sessionStorage.removeItem("user");
+  window.dispatchEvent(new Event(AUTH_EVENT));
+};
+
+const buildDisplayName = (authState) => {
+  const options = [
+    authState.user?.username,
+    authState.user?.name,
+    authState.decoded?.username,
+    authState.decoded?.userName,
+    authState.user?.email,
+    authState.decoded?.userEmail
+  ];
+
+  const firstValid = options.find((value) => String(value || "").trim());
+  return firstValid ? String(firstValid).trim() : "User";
+};
+
+const LoggedIn = ({ authState, onSignOut }) => {
+  const [dropdown, setDropdown] = useState(false);
+  const rootRef = useRef(null);
+
+  const displayName = useMemo(() => buildDisplayName(authState), [authState]);
+  const email = authState.user?.email || authState.decoded?.userEmail || "";
+  const initials = displayName
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() || "")
+    .join("") || "U";
+
+  useEffect(() => {
+    if (!dropdown) {
+      return;
+    }
+
+    const handleOutside = (event) => {
+      if (rootRef.current && !rootRef.current.contains(event.target)) {
+        setDropdown(false);
+      }
+    };
+
+    const handleEsc = (event) => {
+      if (event.key === "Escape") {
+        setDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutside);
+    document.addEventListener("keydown", handleEsc);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutside);
+      document.removeEventListener("keydown", handleEsc);
+    };
+  }, [dropdown]);
+
+  return (
+    <div className={styles.userMenu} ref={rootRef}>
+      <button
+        type="button"
+        className={styles.isLoggedIn}
+        onClick={() => setDropdown((prev) => !prev)}
+        aria-expanded={dropdown}
+        aria-haspopup="menu"
+      >
+        <span className={styles.userIcon}>{initials}</span>
+        <span className={styles.userName}>{displayName}</span>
+        <span className={styles.userChevron} aria-hidden="true">
+          {dropdown ? "^" : "v"}
+        </span>
+      </button>
+
+      {dropdown && (
+        <div className={styles.dropdown} role="menu">
+          <div className={styles.dropdownHeader}>
+            <p className={styles.dropdownName}>{displayName}</p>
+            {email ? <p className={styles.dropdownEmail}>{email}</p> : null}
+          </div>
+
+          <div className={styles.dropdownActions}>
+            <Link className={styles.dropdownButton} to="/WordArch" onClick={() => setDropdown(false)}>
+              Continue Learning
+            </Link>
+            <button
+              type="button"
+              className={`${styles.dropdownButton} ${styles.logoutButton}`}
+              onClick={() => {
+                setDropdown(false);
+                onSignOut();
+              }}
+            >
+              Sign Out
+            </button>
+          </div>
         </div>
-    );
+      )}
+    </div>
+  );
 };
 
 const Header = () => {
-    const token = localStorage.getItem("token");
-    const isLoggedIn = Boolean(token);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
-    return (
-        <header className={styles.container}>
-            <motion.div
-                initial={{ y: -50, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.5, duration: 0.4 }}
-            >
-                <div className={styles.logo}>Voc&M</div>
-            </motion.div>
+  const [authState, setAuthState] = useState(() => readStoredAuth());
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-            <button
-                type="button"
-                className={styles.menuToggle}
-                aria-label="Toggle navigation"
-                aria-expanded={isMenuOpen}
-                onClick={() => setIsMenuOpen((prev) => !prev)}
-            >
-                <span className={styles.menuIconLine} />
-                <span className={styles.menuIconLine} />
-                <span className={styles.menuIconLine} />
-            </button>
+  useEffect(() => {
+    const syncAuth = () => {
+      setAuthState(readStoredAuth());
+    };
 
-            <nav className={`${styles.navigator} ${isMenuOpen ? styles.navigatorOpen : ""}`} onClick={() => setIsMenuOpen(false)}>
-                <motion.div
-                    initial={{ x: -50, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 0, duration: 0.4 }}
-                >
-                    <Link className={styles.Link} to="/">Home</Link>
-                </motion.div>
-                <motion.div
-                    initial={{ x: -50, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 0.4, duration: 1.2 }}
-                >
-                    <Link className={styles.Link} to="/WordArch">Word Archive</Link>
-                </motion.div>
-                <motion.div
-                    initial={{ x: -50, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 0.6, duration: 1 }}
-                >
-                    <Link className={styles.Link} to="/collocations">Collocations</Link>
-                </motion.div>
-                <motion.div
-                    initial={{ x: -50, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 0.8, duration: 1 }}
-                >
-                    <Link className={styles.Link} to="/Testing">Testing</Link>
-                </motion.div>
-            </nav>
+    window.addEventListener("storage", syncAuth);
+    window.addEventListener(AUTH_EVENT, syncAuth);
 
-            <motion.div
-                className={styles.authSlot}
-                initial={{ x: 50, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 0.6, duration: 0.4 }}
-            >
-                {!isLoggedIn ? (
-                    <Link to="/Login"><div className={styles.loginButton}>LOGIN</div></Link>
-                ) : (
-                    <LoggedIn />
-                )}
-            </motion.div>
-        </header>
-    );
+    return () => {
+      window.removeEventListener("storage", syncAuth);
+      window.removeEventListener(AUTH_EVENT, syncAuth);
+    };
+  }, []);
+
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location.pathname]);
+
+  const isLoggedIn = Boolean(authState.token);
+
+  const handleSignOut = () => {
+    clearStoredAuth();
+    navigate("/Login");
+  };
+
+  return (
+    <header className={styles.container}>
+      <motion.div
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.5, duration: 0.4 }}
+      >
+        <Link to="/" className={styles.logoLink}>
+          <div className={styles.logo}>Voc&M</div>
+        </Link>
+      </motion.div>
+
+      <button
+        type="button"
+        className={styles.menuToggle}
+        aria-label="Toggle navigation"
+        aria-expanded={isMenuOpen}
+        onClick={() => setIsMenuOpen((prev) => !prev)}
+      >
+        <span className={styles.menuIconLine} />
+        <span className={styles.menuIconLine} />
+        <span className={styles.menuIconLine} />
+      </button>
+
+      <nav
+        className={`${styles.navigator} ${isMenuOpen ? styles.navigatorOpen : ""}`}
+        onClick={() => setIsMenuOpen(false)}
+      >
+        <motion.div initial={{ x: -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0, duration: 0.4 }}>
+          <Link className={styles.Link} to="/">
+            Home
+          </Link>
+        </motion.div>
+        <motion.div initial={{ x: -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.4, duration: 1.2 }}>
+          <Link className={styles.Link} to="/WordArch">
+            Word Archive
+          </Link>
+        </motion.div>
+        <motion.div initial={{ x: -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.6, duration: 1 }}>
+          <Link className={styles.Link} to="/collocations">
+            Collocations
+          </Link>
+        </motion.div>
+        <motion.div initial={{ x: -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.8, duration: 1 }}>
+          <Link className={styles.Link} to="/Testing">
+            Testing
+          </Link>
+        </motion.div>
+      </nav>
+
+      <motion.div
+        className={styles.authSlot}
+        initial={{ x: 50, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ delay: 0.6, duration: 0.4 }}
+      >
+        {!isLoggedIn ? (
+          <div className={styles.authButtons}>
+            <Link to="/Login" className={styles.loginButton}>
+              Sign In
+            </Link>
+            <Link to="/Registration" className={styles.registerButton}>
+              Sign Up
+            </Link>
+          </div>
+        ) : (
+          <LoggedIn authState={authState} onSignOut={handleSignOut} />
+        )}
+      </motion.div>
+    </header>
+  );
 };
 
 export default Header;
