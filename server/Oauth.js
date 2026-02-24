@@ -69,7 +69,23 @@ router.post("/api/auth/google", async (req, res) => {
       }
     });
   } catch (error) {
-    console.error("Google auth error:", error.message);
+    const message = String(error?.message || "");
+    const isInvalidCode =
+      message.includes("invalid_grant") ||
+      message.includes("Bad Request") ||
+      message.includes("Token used too late") ||
+      message.includes("Malformed auth code");
+
+    if (isInvalidCode) {
+      return res.status(401).json({ error: "Google authorization code is invalid or expired" });
+    }
+
+    const isConfigError = message.includes("Google OAuth environment variables are not configured");
+    if (isConfigError) {
+      return res.status(503).json({ error: "Google OAuth is not configured on server" });
+    }
+
+    console.error("Google auth error:", message);
     return res.status(500).json({ error: "Failed to authenticate with Google" });
   }
 });

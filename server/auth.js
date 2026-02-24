@@ -7,9 +7,14 @@ const router = express.Router();
 
 const SALT_ROUNDS = 12;
 const EMAIL_REGEX = /^\S+@\S+\.\S+$/;
+const LOGIN_WINDOW_MS = Math.max(60_000, Number(process.env.LOGIN_LIMIT_WINDOW_MS) || 15 * 60_000);
+const LOGIN_MAX_ATTEMPTS = Math.max(3, Number(process.env.LOGIN_LIMIT_MAX_ATTEMPTS) || 10);
+
+const loginAttempts = new Map();
 
 const normalizeEmail = (email) => String(email || "").trim().toLowerCase();
 const normalizeUsername = (username) => String(username || "").trim();
+const normalizeIp = (ip) => String(ip || "unknown").trim();
 
 const getJwtSecret = () => {
   const jwtSecret = process.env.JWT_SECRET;
@@ -39,6 +44,43 @@ const buildAuthPayload = (user, token, message) => ({
     email: user.email
   }
 });
+
+const getAttemptKey = (req, email) => `${normalizeIp(req.ip)}:${email || "unknown"}`;
+
+const pruneAndReadAttempts = (key) => {
+  const now = Date.now();
+  const entry = loginAttempts.get(key);
+
+  if (!entry || now - entry.startedAt >= LOGIN_WINDOW_MS) {
+    const resetEntry = { startedAt: now, attempts: 0 };
+    loginAttempts.set(key, resetEntry);
+    return resetEntry;
+  }
+
+  return entry;
+};
+
+const recordFailedAttempt = (key) => {
+  const entry = pruneAndReadAttempts(key);
+  entry.attempts += 1;
+  loginAttempts.set(key, entry);
+  return entry.attempts;
+};
+
+const clearAttempts = (key) => {
+  if (loginAttempts.has(key)) {
+    loginAttempts.delete(key);
+  }
+};
+
+const cleanupStaleAttempts = () => {
+  const now = Date.now();
+  for (const [key, entry] of loginAttempts.entries()) {
+    if (now - entry.startedAt >= LOGIN_WINDOW_MS) {
+      loginAttempts.delete(key);
+    }
+  }
+};
 
 router.post("/api/register", async (req, res) => {
   try {
@@ -87,8 +129,22 @@ router.post("/api/register", async (req, res) => {
 
 router.post("/api/login", async (req, res) => {
   try {
+    cleanupStaleAttempts();
+
     const email = normalizeEmail(req.body.email);
     const password = String(req.body.password || "");
+    const attemptKey = getAttemptKey(req, email);
+    const attemptsEntry = pruneAndReadAttempts(attemptKey);
+
+    if (attemptsEntry.attempts >= LOGIN_MAX_ATTEMPTS) {
+      const retryAfterSeconds = Math.ceil(
+        (LOGIN_WINDOW_MS - (Date.now() - attemptsEntry.startedAt)) / 1000
+      );
+      res.set("Retry-After", String(Math.max(1, retryAfterSeconds)));
+      return res.status(429).json({
+        message: "Too many login attempts. Try again later."
+      });
+    }
 
     if (!email || !password) {
       return res.status(400).json({ message: "Email and password are required" });
@@ -96,13 +152,17 @@ router.post("/api/login", async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user) {
+      recordFailedAttempt(attemptKey);
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
+      recordFailedAttempt(attemptKey);
       return res.status(401).json({ message: "Invalid email or password" });
     }
+
+    clearAttempts(attemptKey);
 
     const token = createToken(user);
 

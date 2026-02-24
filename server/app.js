@@ -5,7 +5,7 @@ const express = require("express");
 const cors = require("cors");
 const listEndpoints = require("express-list-endpoints");
 
-const connectDB = require("./database");
+const { connectDB, getDbMeta } = require("./database");
 const Word = require("./models/words");
 const Auth = require("./auth");
 const Oauth = require("./Oauth");
@@ -44,6 +44,18 @@ app.use(express.json({ limit: "100kb" }));
 
 app.get("/", (req, res) => {
   res.send("API is running");
+});
+
+app.get("/api/health", (req, res) => {
+  const db = getDbMeta();
+  const isHealthy = db.readyState === 1;
+
+  res.status(isHealthy ? 200 : 503).json({
+    status: isHealthy ? "ok" : "degraded",
+    uptimeSeconds: Math.round(process.uptime()),
+    timestamp: new Date().toISOString(),
+    db
+  });
 });
 
 app.get("/api/words", async (req, res, next) => {
