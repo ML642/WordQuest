@@ -1,19 +1,47 @@
-const mongoose = require('mongoose');
-const path = require('path');
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
-async function connectDB() {
-  try {
-    //console.log(require('dotenv').config({ path: __dirname + '/.env' }));
+const mongoose = require("mongoose");
 
-    console.log(process.env.MONGODB_URI)
-    await mongoose.connect(process.env.MONGODB_URI , {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
-    console.log("✅ Connected to MongoDB Atlas");
-  } catch (err) {
-    console.error("❌ MongoDB connection error:", err);
-    process.exit(1);
+let connectionPromise = null;
+
+async function connectDB() {
+  if (mongoose.connection.readyState === 1) {
+    return mongoose.connection;
   }
+
+  if (connectionPromise) {
+    return connectionPromise;
+  }
+
+  const mongoUri = process.env.MONGODB_URI;
+  if (!mongoUri) {
+    throw new Error("MONGODB_URI is not set");
+  }
+
+  const connectOptions = {
+    serverSelectionTimeoutMS: Number(process.env.MONGODB_SERVER_SELECTION_TIMEOUT_MS) || 12000,
+    family: 4
+  };
+
+  connectionPromise = mongoose
+    .connect(mongoUri, connectOptions)
+    .then((conn) => {
+      console.log("Connected to MongoDB");
+      return conn;
+    })
+    .catch((err) => {
+      connectionPromise = null;
+      const atlasServerHint =
+        "Could not connect to any servers in your MongoDB Atlas cluster";
+
+      if (err?.message?.includes(atlasServerHint)) {
+        console.error(
+          "Atlas connection failed. Check Network Access IP whitelist, URI format, and cluster status."
+        );
+      }
+
+      throw err;
+    });
+
+  return connectionPromise;
 }
+
 module.exports = connectDB;
