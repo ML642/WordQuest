@@ -2,6 +2,15 @@ import React, { useState } from 'react';
 import styles from './registration.module.css';
 import { Link } from "react-router"
 import axios from "axios"
+import PopupMessage from "../../components/PopupMessage/PopupMessage";
+import {
+  EMPTY_POPUP,
+  createPopup,
+  getRegistrationPopupFromError
+} from "../../utils/authPopup";
+
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 const Registration = () => {
   const [formData, setFormData] = useState({
     username: "" , 
@@ -9,6 +18,7 @@ const Registration = () => {
     password: ''
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [popup, setPopup] = useState(EMPTY_POPUP);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,10 +30,11 @@ const Registration = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setPopup(EMPTY_POPUP);
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/register",
+        `${API_BASE_URL}/api/register`,
         {
           username: formData.username,
           email: formData.email,
@@ -35,11 +46,11 @@ const Registration = () => {
           }
         }
       );
-      console.log('Registration successful:', response.data);
+      const successMessage = response.data?.message || "User registered successfully";
+      setPopup(createPopup("success", "Registration complete", successMessage));
     } catch (error) {
-      console.error('Registration error:', error.response?.data || error.message);
+      setPopup(getRegistrationPopupFromError(error));
     }
-    console.log('Login:', formData);
     setIsLoading(false);
   };
 
@@ -49,6 +60,7 @@ const Registration = () => {
         <div className={styles.shape}></div>
         <div className={styles.shape}></div>
       </div>
+      <PopupMessage popup={popup} onClose={() => setPopup(EMPTY_POPUP)} />
       
       <div className={styles.card}>
         <div className={styles.header}>

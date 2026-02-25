@@ -3,6 +3,12 @@ import styles from "./Login.module.css";
 import { Link, useNavigate } from "react-router";
 import axios from "axios";
 import GoogleOauth from "./Oauth";
+import PopupMessage from "../../components/PopupMessage/PopupMessage";
+import {
+  EMPTY_POPUP,
+  createPopup,
+  getLoginPopupFromError
+} from "../../utils/authPopup";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 const AUTH_EVENT = "auth-state-changed";
@@ -54,7 +60,7 @@ const Login = () => {
   });
   const [rememberMe, setRememberMe] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [status, setStatus] = useState({ type: "", message: "" });
+  const [popup, setPopup] = useState(EMPTY_POPUP);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -66,7 +72,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus({ type: "", message: "" });
+    setPopup(EMPTY_POPUP);
     setIsLoading(true);
 
     try {
@@ -86,29 +92,14 @@ const Login = () => {
       if (response.status === 201 && response.data?.token) {
         storeAuthSession(response.data, rememberMe);
         setSession(readStoredSession());
-        setStatus({ type: "success", message: "Signed in successfully. Redirecting..." });
+        setPopup(createPopup("success", "Signed in", "Signed in successfully. Redirecting..."));
         setTimeout(() => navigate("/"), 450);
         return;
       }
 
-      setStatus({ type: "error", message: "Unexpected login response. Please try again." });
+      setPopup(createPopup("error", "Sign-in issue", "Unexpected login response. Please try again."));
     } catch (error) {
-      const statusCode = error.response?.status;
-      const retryAfter = error.response?.headers?.["retry-after"];
-      const fallbackMessage = error.response?.data?.message;
-
-      let message = fallbackMessage || "Could not sign in right now. Please try again.";
-      if (statusCode === 401) {
-        message = "Invalid email or password.";
-      } else if (statusCode === 429) {
-        message = retryAfter
-          ? `Too many attempts. Try again in ${retryAfter} seconds.`
-          : "Too many attempts. Please wait and try again.";
-      } else if (statusCode === 503) {
-        message = "Sign-in service is unavailable right now.";
-      }
-
-      setStatus({ type: "error", message });
+      setPopup(getLoginPopupFromError(error));
     } finally {
       setIsLoading(false);
     }
@@ -116,18 +107,18 @@ const Login = () => {
 
   const handleGoogleSuccess = (data) => {
     if (!data?.token) {
-      setStatus({ type: "error", message: "Google login failed: missing token." });
+      setPopup(createPopup("error", "Google sign-in", "Google login failed: missing token."));
       return;
     }
 
     storeAuthSession(data, rememberMe);
     setSession(readStoredSession());
-    setStatus({ type: "success", message: "Signed in with Google. Redirecting..." });
+    setPopup(createPopup("success", "Signed in", "Signed in with Google. Redirecting..."));
     setTimeout(() => navigate("/"), 450);
   };
 
   const handleGoogleError = (message) => {
-    setStatus({ type: "error", message: message || "Google sign-in failed." });
+    setPopup(createPopup("error", "Google sign-in", message || "Google sign-in failed."));
   };
 
   if (session.token) {
@@ -139,6 +130,7 @@ const Login = () => {
           <div className={styles.shape}></div>
           <div className={styles.shape}></div>
         </div>
+        <PopupMessage popup={popup} onClose={() => setPopup(EMPTY_POPUP)} />
 
         <div className={styles.card}>
           <div className={styles.header}>
@@ -158,7 +150,7 @@ const Login = () => {
                 onClick={() => {
                   clearStoredSession();
                   setSession(readStoredSession());
-                  setStatus({ type: "", message: "" });
+                  setPopup(EMPTY_POPUP);
                 }}
               >
                 Sign Out
@@ -176,18 +168,13 @@ const Login = () => {
         <div className={styles.shape}></div>
         <div className={styles.shape}></div>
       </div>
+      <PopupMessage popup={popup} onClose={() => setPopup(EMPTY_POPUP)} />
 
       <div className={styles.card}>
         <div className={styles.header}>
           <h1 className={styles.title}>Welcome Back</h1>
           <p className={styles.subtitle}>Sign in to continue your learning streak.</p>
         </div>
-
-        {status.message ? (
-          <div className={`${styles.statusMessage} ${status.type === "error" ? styles.statusError : styles.statusSuccess}`}>
-            {status.message}
-          </div>
-        ) : null}
 
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.inputGroup}>

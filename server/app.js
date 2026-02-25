@@ -119,9 +119,22 @@ app.use((err, req, res, next) => {
 const startServer = async () => {
   try {
     await connectDB();
-    app.listen(PORT, () => {
+    const server = app.listen(PORT, () => {
       console.log("available endpoints:", listEndpoints(app));
       console.log(`server is running on port ${PORT}`);
+    });
+
+    server.on("error", (error) => {
+      if (error && error.code === "EADDRINUSE") {
+        console.error(
+          `Port ${PORT} is already in use. Stop the running process on this port or set a different PORT in server/.env.`
+        );
+        process.exit(1);
+        return;
+      }
+
+      console.error("Server failed to listen:", error.message);
+      process.exit(1);
     });
   } catch (error) {
     console.error("Failed to start server:", error.message);

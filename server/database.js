@@ -21,9 +21,13 @@ const getConnectionTargets = () => {
 };
 
 const connectOptions = {
-  serverSelectionTimeoutMS: Number(process.env.MONGODB_SERVER_SELECTION_TIMEOUT_MS) || 12000,
-  family: 4
+  serverSelectionTimeoutMS: Number(process.env.MONGODB_SERVER_SELECTION_TIMEOUT_MS) || 12000
 };
+
+const configuredIpFamily = Number(process.env.MONGODB_IP_FAMILY);
+if (Number.isInteger(configuredIpFamily) && (configuredIpFamily === 4 || configuredIpFamily === 6)) {
+  connectOptions.family = configuredIpFamily;
+}
 
 const maxRetriesPerTarget = Math.max(1, Number(process.env.MONGODB_CONNECT_RETRIES) || 2);
 const retryDelayMs = Math.max(500, Number(process.env.MONGODB_CONNECT_RETRY_DELAY_MS) || 1500);
@@ -48,6 +52,11 @@ const tryConnectTarget = async (target) => {
       if (err?.message?.includes(atlasServerHint)) {
         console.error(
           "Atlas connection failed. Check Network Access IP whitelist, URI format, and cluster status."
+        );
+      }
+      if (err?.message?.includes("querySrv")) {
+        console.error(
+          "Atlas DNS SRV lookup failed. Check your DNS/network settings, or use Atlas standard (non-SRV) URI as fallback."
         );
       }
 

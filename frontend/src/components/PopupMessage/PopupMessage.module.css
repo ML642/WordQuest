@@ -1,0 +1,79 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2500;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 86px 1rem 1rem;
+  background: rgba(2, 6, 23, 0.42);
+}
+
+.popup {
+  width: min(430px, 100%);
+  border-radius: 14px;
+  padding: 1rem 1rem 0.95rem;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  border: 1px solid transparent;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: popIn 170ms ease-out;
+}
+
+.success {
+  background: rgba(6, 78, 59, 0.9);
+  border-color: rgba(52, 211, 153, 0.48);
+  color: #d1fae5;
+}
+
+.error {
+  background: rgba(127, 29, 29, 0.9);
+  border-color: rgba(248, 113, 113, 0.56);
+  color: #fee2e2;
+}
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.message {
+  margin: 0.45rem 0 0;
+  font-size: 0.92rem;
+  line-height: 1.42;
+}
+
+.closeButton {
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.92;
+  padding: 0.2rem 0.3rem;
+}
+
+.closeButton:hover {
+  opacity: 1;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
