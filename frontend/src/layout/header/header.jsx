@@ -112,9 +112,6 @@ const LoggedIn = ({ authState, onSignOut }) => {
       >
         <span className={styles.userIcon}>{initials}</span>
         <span className={styles.userName}>{displayName}</span>
-        <span className={styles.userChevron} aria-hidden="true">
-          {dropdown ? "^" : "v"}
-        </span>
       </button>
 
       {dropdown && (
@@ -127,6 +124,9 @@ const LoggedIn = ({ authState, onSignOut }) => {
           <div className={styles.dropdownActions}>
             <Link className={styles.dropdownButton} to="/WordArch" onClick={() => setDropdown(false)}>
               Continue Learning
+            </Link>
+            <Link className={styles.dropdownButton} to="/MyStats" onClick={() => setDropdown(false)}>
+              My Stats
             </Link>
             <button
               type="button"
