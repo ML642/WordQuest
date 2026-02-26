@@ -1,5 +1,101 @@
 const mongoose = require("mongoose");
 
+const levelMasterySchema = new mongoose.Schema(
+  {
+    known: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    answered: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    score: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    maxScore: {
+      type: Number,
+      default: 0,
+      min: 0
+    }
+  },
+  {
+    _id: false
+  }
+);
+
+const userStatsSchema = new mongoose.Schema(
+  {
+    score: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    testsTaken: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    knownWords: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    correctAnswers: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    totalAnswers: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    streak: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    lastActiveDate: {
+      type: Date,
+      default: null
+    },
+    levelMastery: {
+      A1: {
+        type: levelMasterySchema,
+        default: () => ({})
+      },
+      A2: {
+        type: levelMasterySchema,
+        default: () => ({})
+      },
+      B1: {
+        type: levelMasterySchema,
+        default: () => ({})
+      },
+      B2: {
+        type: levelMasterySchema,
+        default: () => ({})
+      },
+      C1: {
+        type: levelMasterySchema,
+        default: () => ({})
+      },
+      C2: {
+        type: levelMasterySchema,
+        default: () => ({})
+      }
+    }
+  },
+  {
+    _id: false
+  }
+);
+
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -21,6 +117,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       minlength: 8
+    },
+    stats: {
+      type: userStatsSchema,
+      default: () => ({})
     }
   },
   {
