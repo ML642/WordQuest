@@ -9,6 +9,7 @@ const { connectDB, getDbMeta } = require("./database");
 const Word = require("./models/words");
 const Auth = require("./auth");
 const Oauth = require("./Oauth");
+const Stats = require("./stats");
 
 const DEFAULT_ALLOWED_ORIGINS = ["http://localhost:3000", "http://localhost:5000"];
 const allowedOrigins = process.env.CORS_ORIGINS
@@ -102,6 +103,7 @@ app.post("/api/words", async (req, res, next) => {
 
 app.use(Auth);
 app.use(Oauth);
+app.use(Stats);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
